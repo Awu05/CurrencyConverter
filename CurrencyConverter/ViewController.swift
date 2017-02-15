@@ -137,7 +137,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         self.view.endEditing(true)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         let hasNetwork = connectedToNetwork()
         
         if hasNetwork == false {
