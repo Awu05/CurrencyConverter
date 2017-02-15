@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SystemConfiguration
 
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
@@ -56,6 +57,17 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     @IBAction func convertBtn() {
         
+        let hasNetwork = connectedToNetwork()
+        
+        if hasNetwork == false {
+            noNetwork()
+        } else {
+            convert()
+        }
+        
+    }
+    
+    func convert() {
         self.view.endEditing(true)
         
         if (fromCurrency.text! == "") || (toCurrency.text! == "" ) {
@@ -96,8 +108,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             }
             
         }
-        
-        
     }
 
     override func viewDidLoad() {
@@ -125,6 +135,22 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     func handleTap(recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let hasNetwork = connectedToNetwork()
+        
+        if hasNetwork == false {
+            noNetwork()
+        }
+    }
+    
+    func noNetwork() {
+        let alertController = UIAlertController(title: "No Internet!", message:
+            "Please check your network settings and make sure that you are connected to a network.", preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+        
+        self.present(alertController, animated: true, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -174,6 +200,30 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
     }
     
+    func connectedToNetwork() -> Bool {
+        
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+            return false
+        }
+        
+        var flags: SCNetworkReachabilityFlags = []
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        
+        return (isReachable && !needsConnection)
+    }
 
 }
 
