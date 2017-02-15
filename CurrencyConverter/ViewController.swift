@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     
     @IBOutlet weak var inputLbl: UITextField!
@@ -50,38 +50,54 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         fromCurrency.text = toCurrency.text
         toCurrency.text = temp
+        
+        self.view.endEditing(true)
     }
     
     @IBAction func convertBtn() {
-        activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
         
-        Utilities.getExchangeRates(fromCurrency: fromCurrency.text!, toCurrency: toCurrency.text!) { (exchangeRate) in
+        self.view.endEditing(true)
+        
+        if (fromCurrency.text! == "") || (toCurrency.text! == "" ) {
+            let alertController = UIAlertController(title: "Empty Currency Field", message:
+                "You have left a empty currency field.", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
             
-            DispatchQueue.main.async {
-                guard let amount:Double = Double(self.inputLbl.text!)
-                    else {
-                        
-                        let exchangeRateTotal = 1 * exchangeRate
-                        
-                        self.outputLbl.text = String(format: "%.4f", exchangeRateTotal)
-                        
-                        self.activityIndicator.stopAnimating()
-                        self.activityIndicator.isHidden = true
-                        
-                        return
+            self.present(alertController, animated: true, completion: nil)
+            
+        } else {
+            
+            activityIndicator.isHidden = false
+            activityIndicator.startAnimating()
+            
+            Utilities.getExchangeRates(fromCurrency: fromCurrency.text!, toCurrency: toCurrency.text!) { (exchangeRate) in
+                
+                DispatchQueue.main.async {
+                    guard let amount:Double = Double(self.inputLbl.text!)
+                        else {
+                            
+                            let exchangeRateTotal = 1 * exchangeRate
+                            
+                            self.outputLbl.text = String(format: "%.4f", exchangeRateTotal)
+                            
+                            self.activityIndicator.stopAnimating()
+                            self.activityIndicator.isHidden = true
+                            
+                            return
+                    }
+                    
+                    let exchangeRateTotal = amount * exchangeRate
+                    
+                    self.outputLbl.text = String(format: "%.4f", exchangeRateTotal)
+                    
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.isHidden = true
                 }
-                
-                let exchangeRateTotal = amount * exchangeRate
-                
-                self.outputLbl.text = String(format: "%.4f", exchangeRateTotal)
-                
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.isHidden = true
             }
             
-            
         }
+        
+        
     }
 
     override func viewDidLoad() {
@@ -100,6 +116,15 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         fromCurrency.inputView = pickerView
         toCurrency.inputView = pickerView
         
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(recognizer:)))
+        
+        recognizer.delegate = self
+        view.addGestureRecognizer(recognizer)
+        
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -143,20 +168,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         //check to see which field we are manipulating
         if isFromCurrency == true {
             fromCurrency.text = currencyType[row]
-            
-            UIView.transition(with: self.pickerView, duration: 0.5, options: .transitionCrossDissolve, animations: {
-                self.view.endEditing(true)
-                //pickerView.isHidden = true
-            }, completion: nil)
-            
-            
         } else if isToCurrency == true {
             toCurrency.text = currencyType[row]
-            
-            UIView.transition(with: self.pickerView, duration: 0.5, options: .transitionCrossDissolve, animations: {
-                self.view.endEditing(true)
-                //pickerView.isHidden = true
-            }, completion: nil)
         }
         
     }
