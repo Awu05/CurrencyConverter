@@ -18,7 +18,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     @IBOutlet weak var toCurrency: UITextField!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    let pickerView = UIPickerView()
     
     let currencyType = ["AUD","BGN","BRL","CAD","CHF","CNY","CZK","DKK", "EUR","GBP","HKD","HRK","HUF","IDR","ILS","INR","JPY","KRW","MXN","MYR","NOK","NZD","PHP","PLN","RON","RUB","SEK","SGD","THB","TRY", "USD","ZAR"]
     
@@ -51,6 +53,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     @IBAction func convertBtn() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        
         Utilities.getExchangeRates(fromCurrency: fromCurrency.text!, toCurrency: toCurrency.text!) { (exchangeRate) in
             
             DispatchQueue.main.async {
@@ -61,11 +66,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                         
                         self.outputLbl.text = String(format: "%.4f", exchangeRateTotal)
                         
+                        self.activityIndicator.stopAnimating()
+                        self.activityIndicator.isHidden = true
+                        
                         return
                 }
+                
                 let exchangeRateTotal = amount * exchangeRate
                 
                 self.outputLbl.text = String(format: "%.4f", exchangeRateTotal)
+                
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.isHidden = true
             }
             
             
@@ -76,11 +88,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let pickerView = UIPickerView()
         pickerView.delegate = self
         pickerView.dataSource = self
         fromCurrency.delegate = self
         toCurrency.delegate = self
+        
+        activityIndicator.isHidden = true
         
         pickerView.reloadAllComponents()
         
@@ -108,12 +121,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         if textField.tag == 1 {
             isFromCurrency = true
             isToCurrency = false
-            fromCurrency.text = currencyType[0]
+            pickerView.isHidden = false
+            //fromCurrency.text = currencyType[0]
             
         } else if textField.tag == 2 {
             isFromCurrency = false
             isToCurrency = true
-            toCurrency.text = fromCurrency.text
+            pickerView.isHidden = false
+            //toCurrency.text = fromCurrency.text
         }
         
     }
@@ -128,8 +143,20 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         //check to see which field we are manipulating
         if isFromCurrency == true {
             fromCurrency.text = currencyType[row]
+            
+            UIView.transition(with: self.pickerView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.view.endEditing(true)
+                //pickerView.isHidden = true
+            }, completion: nil)
+            
+            
         } else if isToCurrency == true {
             toCurrency.text = currencyType[row]
+            
+            UIView.transition(with: self.pickerView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.view.endEditing(true)
+                //pickerView.isHidden = true
+            }, completion: nil)
         }
         
     }
