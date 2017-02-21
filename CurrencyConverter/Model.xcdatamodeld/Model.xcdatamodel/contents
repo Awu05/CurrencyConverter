@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16A313a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="TrackedCurrency" representedClassName="TrackedCurrency" syncable="YES" codeGenerationType="class">
+        <attribute name="currentRate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="fromCurrency" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="targetRate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="toCurrency" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="TrackedCurrency" positionX="-63" positionY="-18" width="128" height="105"/>
+    </elements>
+</model>

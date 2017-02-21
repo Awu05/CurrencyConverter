@@ -1,25 +1,27 @@
 //
-//  ViewController.swift
+//  DetailViewController.swift
 //  CurrencyConverter
 //
-//  Created by Andy Wu on 2/14/17.
+//  Created by Andy Wu on 2/16/17.
 //  Copyright © 2017 Andy Wu. All rights reserved.
 //
 
 import UIKit
 
-
-class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
-    
-    @IBOutlet weak var inputLbl: UITextField!
-    @IBOutlet weak var outputLbl: UILabel!
     
     @IBOutlet weak var fromCurrency: UITextField!
     
     @IBOutlet weak var toCurrency: UITextField!
     
+    @IBOutlet weak var targetExchgRate: UITextField!
+    
+    @IBOutlet weak var alertSwitchProperty: UISwitch!
+    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var saveBtnProperty: UIButton!
     
     var mySharedData = DataAccessObject.sharedManager
     
@@ -30,62 +32,47 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     var isFromCurrency = false
     var isToCurrency = false
     
-    var currentExchRate:Double = 0.0
-    
-    @IBAction func numPressed(_ sender: UIButton) {
-        //print("Num Pressed: \((sender.titleLabel?.text)!)")
-        let numInput = (sender.titleLabel?.text)!
-        let currentNum = (inputLbl.text!)
-        inputLbl.text = "\(currentNum + numInput)"
+    @IBAction func alertSwitch() {
         
-        
-        if (currentExchRate != 0){
-            guard let amount:Double = Double(inputLbl.text!)
-                else { return }
-            let exchangeRateTotal = amount * currentExchRate
-            self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
-        }
-    }
-    
-    @IBAction func deleteBtn() {
-        var delFromInput = inputLbl.text!
-        
-        if delFromInput.characters.count > 0 {
-            delFromInput.remove(at: delFromInput.index(before: delFromInput.endIndex))
-            inputLbl.text = delFromInput
+        if alertSwitchProperty.isOn == true {
+            targetExchgRate.isHidden = false
+        } else {
+            targetExchgRate.isHidden = true
         }
         
-        if (currentExchRate != 0){
-            guard let amount:Double = Double(inputLbl.text!)
-                else { return }
-            let exchangeRateTotal = amount * currentExchRate
-            self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
-        }
     }
     
-    @IBAction func swapBtn() {
-        let temp = fromCurrency.text
-        
-        fromCurrency.text = toCurrency.text
-        toCurrency.text = temp
-        
-        self.view.endEditing(true)
-    }
-    
-    @IBAction func convertBtn() {
+    @IBAction func saveBtn() {
         
         let hasNetwork = Utilities.connectedToNetwork()
         
         if hasNetwork == false {
             noNetwork()
         } else {
-            convert()
+            self.view.endEditing(true)
+            
+            saveInfo()
         }
+        
         
     }
     
-    func convert() {
-        self.view.endEditing(true)
+    func saveInfo() {
+        var targetRate = 0.0
+        
+        if alertSwitchProperty.isOn == true {
+            //Use a guard/catch statement here
+            if (targetExchgRate.text! != "") || (targetExchgRate.text! != "."){
+                let targetRateStr = NSDecimalNumber(string: targetExchgRate.text!)
+                
+                if targetRateStr == NSDecimalNumber.notANumber {
+                    targetRate = 0.0
+                } else {
+                    targetRate = Double(targetExchgRate.text!)!
+                }
+            }
+            
+        }
         
         if (fromCurrency.text! == "") || (toCurrency.text! == "" ) {
             let alertController = UIAlertController(title: "Empty Currency Field", message:
@@ -95,45 +82,43 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.present(alertController, animated: true, completion: nil)
             
         } else {
+            //print("Target Rate is \(targetRate)")
             
+            saveBtnProperty.isEnabled = false
             activityIndicator.isHidden = false
             activityIndicator.startAnimating()
             
-            Utilities.getExchangeRates(fromCurrency: fromCurrency.text!, toCurrency: toCurrency.text!) { (exchangeRate) in
+            Utilities.getExchangeRates(fromCurrency: fromCurrency.text!, toCurrency: toCurrency.text!) { (exchRate) in
+                /*
+                let rate = String(format: "%.6f", exchRate)
+                print("RateStr is: \(rate)")
+                */
+                
+                let rate = Utilities.roundNumber(exchRate: exchRate)
+                
+                //let trackNewCurrency = Currency(frmCurr: self.fromCurrency.text!, toCurr: self.toCurrency.text!, currRate: rate, targetRate: targetRate)
+                
+                //let newTrackedCurrency = TrackedCurrency(
+                
+                //self.mySharedData.currencyArray.append(newTrackedCurrency)
+                
+                self.mySharedData.addTrackedCurrency(frmCurrency: self.fromCurrency.text!, toCurrency: self.toCurrency.text!, currRate: rate, tarRate: targetRate)
                 
                 DispatchQueue.main.async {
-                    guard let amount:Double = Double(self.inputLbl.text!)
-                        else {
-                            self.currentExchRate = exchangeRate
-                            
-                            let exchangeRateTotal = 1 * exchangeRate
-                            
-                            self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
-                            
-                            self.activityIndicator.stopAnimating()
-                            self.activityIndicator.isHidden = true
-                            
-                            return
-                    }
-                    self.currentExchRate = exchangeRate
-                    
-                    let exchangeRateTotal = amount * exchangeRate
-                    
-                    self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
-                    
                     self.activityIndicator.stopAnimating()
-                    self.activityIndicator.isHidden = true
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
+                
             }
-            
         }
+        
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        mySharedData.loadData()
+        // Do any additional setup after loading the view.
+        targetExchgRate.isHidden = true
         
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -141,6 +126,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         toCurrency.delegate = self
         
         activityIndicator.isHidden = true
+        
+        saveBtnProperty.isEnabled = true
         
         pickerView.reloadAllComponents()
         
@@ -151,11 +138,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
-        
-    }
-    
-    func handleTap(recognizer: UITapGestureRecognizer) {
-        self.view.endEditing(true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -177,6 +159,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
     
     // returns the number of 'columns' to display.
@@ -205,8 +191,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
     }
     
-    
-    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return currencyType[row]
     }
@@ -221,19 +205,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             toCurrency.text = currencyType[row]
         }
         
-        if (fromCurrency.text != "") && (toCurrency.text != "") {
-            let hasNetwork = Utilities.connectedToNetwork()
-            
-            if hasNetwork == false {
-                noNetwork()
-            } else {
-                convert()
-            }
-        }
-        
     }
-    
-    
 
 }
-

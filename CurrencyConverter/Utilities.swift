@@ -6,7 +6,8 @@
 //  Copyright © 2017 Andy Wu. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import SystemConfiguration
 
 
 class Utilities {
@@ -40,6 +41,60 @@ class Utilities {
         }
         
         task.resume()
+    }
+    
+    static func connectedToNetwork() -> Bool {
+        
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+            return false
+        }
+        
+        var flags: SCNetworkReachabilityFlags = []
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        
+        return (isReachable && !needsConnection)
+    }
+    
+    static func roundNumber(exchRate:Double) -> Double{
+        
+        var rate = String(format: "%.6f", exchRate)
+        print("RateStr is: \(rate)")
+        
+        var zeroCount = 0
+        
+        while (true) {
+            let newStrIndex = rate.index(before: rate.endIndex)
+            
+            if rate[newStrIndex] == "0" {
+                rate.remove(at: newStrIndex)
+                zeroCount += 1
+            } else {
+                if zeroCount == 6 {
+                    rate = rate + "00"
+                }
+                
+                print("New Rate: \(rate)")
+                
+                guard let newRate = Double(rate)
+                    else { return 0 }
+                
+                return newRate
+            }
+            
+        }
     }
     
     

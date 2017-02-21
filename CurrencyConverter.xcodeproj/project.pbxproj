@@ -13,6 +13,12 @@
 		E83DF2491E53739D004B55AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E83DF2471E53739D004B55AB /* LaunchScreen.storyboard */; };
 		E83DF2511E539215004B55AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E83DF2501E539215004B55AB /* Assets.xcassets */; };
 		E83DF2531E53A3AB004B55AB /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83DF2521E53A3AB004B55AB /* Utilities.swift */; };
+		E83DF2751E5618C6004B55AB /* TrackingCurrencyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83DF2741E5618C6004B55AB /* TrackingCurrencyTableViewController.swift */; };
+		E83DF2781E56193C004B55AB /* TrackedCurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83DF2761E56193C004B55AB /* TrackedCurrencyTableViewCell.swift */; };
+		E83DF2791E56193C004B55AB /* TrackedCurrencyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E83DF2771E56193C004B55AB /* TrackedCurrencyTableViewCell.xib */; };
+		E83DF27B1E5622C2004B55AB /* DataAccessObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83DF27A1E5622C2004B55AB /* DataAccessObject.swift */; };
+		E83DF27F1E562C34004B55AB /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83DF27E1E562C34004B55AB /* DetailViewController.swift */; };
+		E84E932B1E578EFC00B94FE6 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E84E93291E578EFC00B94FE6 /* Model.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +30,12 @@
 		E83DF24A1E53739D004B55AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E83DF2501E539215004B55AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E83DF2521E53A3AB004B55AB /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		E83DF2741E5618C6004B55AB /* TrackingCurrencyTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingCurrencyTableViewController.swift; sourceTree = "<group>"; };
+		E83DF2761E56193C004B55AB /* TrackedCurrencyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackedCurrencyTableViewCell.swift; sourceTree = "<group>"; };
+		E83DF2771E56193C004B55AB /* TrackedCurrencyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrackedCurrencyTableViewCell.xib; sourceTree = "<group>"; };
+		E83DF27A1E5622C2004B55AB /* DataAccessObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataAccessObject.swift; sourceTree = "<group>"; };
+		E83DF27E1E562C34004B55AB /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		E84E932A1E578EFC00B94FE6 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +70,13 @@
 			children = (
 				E83DF23E1E53739D004B55AB /* AppDelegate.swift */,
 				E83DF2401E53739D004B55AB /* ViewController.swift */,
+				E83DF2741E5618C6004B55AB /* TrackingCurrencyTableViewController.swift */,
+				E83DF2761E56193C004B55AB /* TrackedCurrencyTableViewCell.swift */,
+				E83DF2771E56193C004B55AB /* TrackedCurrencyTableViewCell.xib */,
+				E83DF27E1E562C34004B55AB /* DetailViewController.swift */,
+				E83DF27A1E5622C2004B55AB /* DataAccessObject.swift */,
 				E83DF2521E53A3AB004B55AB /* Utilities.swift */,
+				E84E93291E578EFC00B94FE6 /* Model.xcdatamodeld */,
 				E83DF2421E53739D004B55AB /* Main.storyboard */,
 				E83DF2501E539215004B55AB /* Assets.xcassets */,
 				E83DF2471E53739D004B55AB /* LaunchScreen.storyboard */,
@@ -129,6 +147,7 @@
 			files = (
 				E83DF2491E53739D004B55AB /* LaunchScreen.storyboard in Resources */,
 				E83DF2511E539215004B55AB /* Assets.xcassets in Resources */,
+				E83DF2791E56193C004B55AB /* TrackedCurrencyTableViewCell.xib in Resources */,
 				E83DF2441E53739D004B55AB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,8 +160,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E83DF2531E53A3AB004B55AB /* Utilities.swift in Sources */,
+				E83DF2781E56193C004B55AB /* TrackedCurrencyTableViewCell.swift in Sources */,
+				E83DF27B1E5622C2004B55AB /* DataAccessObject.swift in Sources */,
+				E83DF2751E5618C6004B55AB /* TrackingCurrencyTableViewController.swift in Sources */,
 				E83DF2411E53739D004B55AB /* ViewController.swift in Sources */,
+				E84E932B1E578EFC00B94FE6 /* Model.xcdatamodeld in Sources */,
 				E83DF23F1E53739D004B55AB /* AppDelegate.swift in Sources */,
+				E83DF27F1E562C34004B55AB /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,8 +330,22 @@
 				E83DF24F1E53739D004B55AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E84E93291E578EFC00B94FE6 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E84E932A1E578EFC00B94FE6 /* Model.xcdatamodel */,
+			);
+			currentVersion = E84E932A1E578EFC00B94FE6 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E83DF2331E53739D004B55AB /* Project object */;
 }
