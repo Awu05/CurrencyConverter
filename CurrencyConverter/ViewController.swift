@@ -136,7 +136,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         mySharedData.loadData()
         
         if mySharedData.currencyArray.count > 0 {
-            Utilities.refreshRates()
+            Utilities.refreshRates(completion: {
+                
+            })
         }
         
         pickerView.delegate = self

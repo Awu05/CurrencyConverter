@@ -99,7 +99,8 @@ class Utilities {
         }
     }
     
-    static func refreshRates() {
+    static func refreshRates(completion:@escaping () -> Void) {
+        var currencyCount = 0
         
         for currency in mySharedData.currencyArray {
             //print("Refreshing rates")
@@ -108,7 +109,16 @@ class Utilities {
                 let newRate = Utilities.roundNumber(exchRate: newExchgRate)
                 
                 currency.currentRate = newRate
+                
+                currencyCount += 1
+                
+                if currencyCount == mySharedData.currencyArray.count {
+                    completion()
+                }
             })
+            
+            
+            
         }
         
         
