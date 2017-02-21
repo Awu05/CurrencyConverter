@@ -150,6 +150,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         pickerView.reloadAllComponents()
         
+        inputLbl.inputView = UIView()
         fromCurrency.inputView = pickerView
         toCurrency.inputView = pickerView
         
@@ -238,7 +239,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         }
         
     }
-    
     
 
 }
