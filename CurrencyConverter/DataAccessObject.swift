@@ -69,6 +69,7 @@ class DataAccessObject {
     }
     
     func deleteTrackedCurrency(trackedCurrencyIndex:Int) {
+        self.managedObjectContext .delete(currencyArray[trackedCurrencyIndex])
         currencyArray.remove(at: trackedCurrencyIndex)
         saveData()
     }

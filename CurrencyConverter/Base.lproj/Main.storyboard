@@ -295,7 +295,7 @@
             </objects>
             <point key="canvasLocation" x="24.800000000000001" y="35.532233883058474"/>
         </scene>
-        <!--Your Tacked Currency-->
+        <!--Your Tracked Currency-->
         <scene sceneID="Jjs-6E-6Eo">
             <objects>
                 <tableViewController id="mpH-uW-pMR" customClass="TrackingCurrencyTableViewController" customModule="CurrencyConverter" customModuleProvider="target" sceneMemberID="viewController">
@@ -309,7 +309,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Your Tacked Currency" id="Koc-5x-T7s">
+                    <navigationItem key="navigationItem" title="Your Tracked Currency" id="Koc-5x-T7s">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="qXj-0C-F8Y">
                             <connections>
                                 <segue destination="gpA-TP-BYH" kind="show" id="S5S-he-rE8"/>
@@ -317,6 +317,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="ZLJ-7B-P02">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l4H-tR-NVG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

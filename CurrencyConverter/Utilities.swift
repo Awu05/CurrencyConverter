@@ -12,6 +12,8 @@ import SystemConfiguration
 
 class Utilities {
     
+    static var mySharedData = DataAccessObject.sharedManager
+    
     static func getExchangeRates(fromCurrency:String, toCurrency:String, completion:@escaping (_ info:Double) -> Void) {
         //http://stackoverflow.com/questions/3139879/how-do-i-get-currency-exchange-rates-via-an-api-such-as-google-finance
         //http://api.fixer.io: http://api.fixer.io/latest?base=USD
@@ -71,7 +73,7 @@ class Utilities {
     static func roundNumber(exchRate:Double) -> Double{
         
         var rate = String(format: "%.6f", exchRate)
-        print("RateStr is: \(rate)")
+        //print("RateStr is: \(rate)")
         
         var zeroCount = 0
         
@@ -86,7 +88,7 @@ class Utilities {
                     rate = rate + "00"
                 }
                 
-                print("New Rate: \(rate)")
+                //print("New Rate: \(rate)")
                 
                 guard let newRate = Double(rate)
                     else { return 0 }
@@ -97,5 +99,19 @@ class Utilities {
         }
     }
     
+    static func refreshRates() {
+        
+        for currency in mySharedData.currencyArray {
+            //print("Refreshing rates")
+            getExchangeRates(fromCurrency: currency.fromCurrency!, toCurrency: currency.toCurrency!, completion: { (newExchgRate) in
+                
+                let newRate = Utilities.roundNumber(exchRate: newExchgRate)
+                
+                currency.currentRate = newRate
+            })
+        }
+        
+        
+    }
     
 }

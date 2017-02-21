@@ -15,17 +15,27 @@ class TrackingCurrencyTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         let cellNib = UINib.init(nibName: "TrackedCurrencyTableViewCell", bundle: nil)
         
         //Register the nib/xib with the tableview
         tableView.register(cellNib, forCellReuseIdentifier: "trackedCurrency")
+        
+        
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        
+        self.refreshControl?.addTarget(self, action: #selector(TrackingCurrencyTableViewController.handleRefresh(refreshControl:)), for: UIControlEvents.valueChanged)
+    }
+    
+    
+    func handleRefresh(refreshControl: UIRefreshControl) {
+        // Do some reloading of data and update the table view's data source
+        // Fetch more objects from a web service, for example...
+        
+        Utilities.refreshRates()
+        
+        self.tableView.reloadData()
+        refreshControl.endRefreshing()
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,11 +93,7 @@ class TrackingCurrencyTableViewController: UITableViewController {
             mySharedData.deleteTrackedCurrency(trackedCurrencyIndex: indexPath.row)
             
             tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            
-        }/* else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    */
+        }
     }
     
 
