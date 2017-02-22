@@ -43,7 +43,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             guard let amount:Double = Double(inputLbl.text!)
                 else { return }
             let exchangeRateTotal = amount * currentExchRate
-            self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
+            self.outputLbl.text = String(format: "%.3f", exchangeRateTotal)
         }
     }
     
@@ -61,12 +61,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
                     guard let amount:Double = Double(inputLbl.text!)
                         else { return }
                     let exchangeRateTotal = amount * currentExchRate
-                    self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
+                    self.outputLbl.text = String(format: "%.3f", exchangeRateTotal)
                     
                 } else {
                     
                     let exchangeRateTotal = 1 * currentExchRate
-                    self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
+                    self.outputLbl.text = String(format: "%.3f", exchangeRateTotal)
                     
                 }
                 
@@ -116,25 +116,27 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             
             Utilities.getExchangeRates(fromCurrency: fromCurrency.text!, toCurrency: toCurrency.text!) { (exchangeRate) in
                 
+                let roundRate = Utilities.roundNumber(exchRate: exchangeRate)
+                
                 DispatchQueue.main.async {
                     guard let amount:Double = Double(self.inputLbl.text!)
                         else {
-                            self.currentExchRate = exchangeRate
+                            self.currentExchRate = roundRate
                             
-                            let exchangeRateTotal = 1 * exchangeRate
+                            let exchangeRateTotal = 1 * roundRate
                             
-                            self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
+                            self.outputLbl.text = String(format: "%.3f", exchangeRateTotal)
                             
                             self.activityIndicator.stopAnimating()
                             self.activityIndicator.isHidden = true
                             
                             return
                     }
-                    self.currentExchRate = exchangeRate
+                    self.currentExchRate = roundRate
                     
-                    let exchangeRateTotal = amount * exchangeRate
+                    let exchangeRateTotal = amount * roundRate
                     
-                    self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
+                    self.outputLbl.text = String(format: "%.3f", exchangeRateTotal)
                     
                     self.activityIndicator.stopAnimating()
                     self.activityIndicator.isHidden = true

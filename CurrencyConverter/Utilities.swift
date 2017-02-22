@@ -87,13 +87,35 @@ class Utilities {
                 if zeroCount == 6 {
                     rate = rate + "00"
                 }
-                
                 //print("New Rate: \(rate)")
                 
                 guard let newRate = Double(rate)
                     else { return 0 }
                 
                 return newRate
+            }
+            
+        }
+    }
+    
+    static func formatCurrency(exchgRate:Double) -> String {
+        var rate = String(format: "%.6f", exchgRate)
+        //print("RateStr is: \(rate)")
+        
+        var zeroCount = 0
+        
+        while (true) {
+            let newStrIndex = rate.index(before: rate.endIndex)
+            
+            if rate[newStrIndex] == "0" {
+                rate.remove(at: newStrIndex)
+                zeroCount += 1
+            } else {
+                if zeroCount == 6 {
+                    rate = rate + "00"
+                }
+                
+                return rate
             }
             
         }

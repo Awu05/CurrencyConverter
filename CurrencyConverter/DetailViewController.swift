@@ -89,18 +89,8 @@ class DetailViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             activityIndicator.startAnimating()
             
             Utilities.getExchangeRates(fromCurrency: fromCurrency.text!, toCurrency: toCurrency.text!) { (exchRate) in
-                /*
-                let rate = String(format: "%.6f", exchRate)
-                print("RateStr is: \(rate)")
-                */
                 
                 let rate = Utilities.roundNumber(exchRate: exchRate)
-                
-                //let trackNewCurrency = Currency(frmCurr: self.fromCurrency.text!, toCurr: self.toCurrency.text!, currRate: rate, targetRate: targetRate)
-                
-                //let newTrackedCurrency = TrackedCurrency(
-                
-                //self.mySharedData.currencyArray.append(newTrackedCurrency)
                 
                 self.mySharedData.addTrackedCurrency(frmCurrency: self.fromCurrency.text!, toCurrency: self.toCurrency.text!, currRate: rate, tarRate: targetRate)
                 

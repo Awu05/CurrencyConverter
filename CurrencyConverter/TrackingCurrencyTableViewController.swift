@@ -68,8 +68,8 @@ class TrackingCurrencyTableViewController: UITableViewController {
         let fromCurr:String = currentCurrency.fromCurrency!
         let toCurr:String = currentCurrency.toCurrency!
         let currExchgRate:Double = currentCurrency.currentRate
-        
-        let currLbl = String(format: "1 %@ is %f %@", fromCurr, currExchgRate, toCurr)
+        let exchString = Utilities.formatCurrency(exchgRate: currExchgRate)
+        let currLbl = String(format: "1 %@ is %@ %@", fromCurr, exchString, toCurr)
         
         cell.currencyLbl.text = currLbl
 
