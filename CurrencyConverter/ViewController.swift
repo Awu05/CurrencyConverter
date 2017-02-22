@@ -52,15 +52,30 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         if delFromInput.characters.count > 0 {
             delFromInput.remove(at: delFromInput.index(before: delFromInput.endIndex))
+            
             inputLbl.text = delFromInput
+            
+            if (currentExchRate != 0){
+                if delFromInput.characters.count > 0 {
+                    
+                    guard let amount:Double = Double(inputLbl.text!)
+                        else { return }
+                    let exchangeRateTotal = amount * currentExchRate
+                    self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
+                    
+                } else {
+                    
+                    let exchangeRateTotal = 1 * currentExchRate
+                    self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
+                    
+                }
+                
+                
+            }
+            
         }
         
-        if (currentExchRate != 0){
-            guard let amount:Double = Double(inputLbl.text!)
-                else { return }
-            let exchangeRateTotal = amount * currentExchRate
-            self.outputLbl.text = String(format: "%.2f", exchangeRateTotal)
-        }
+        
     }
     
     @IBAction func swapBtn() {
@@ -69,7 +84,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         fromCurrency.text = toCurrency.text
         toCurrency.text = temp
         
-        self.view.endEditing(true)
+        convert()
     }
     
     @IBAction func convertBtn() {
